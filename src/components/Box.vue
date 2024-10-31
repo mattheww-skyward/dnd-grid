@@ -44,7 +44,9 @@ overlayEl.classList.add($style.overlay)
 const slotContainerElRef = shallowRef()
 const boxElRef = shallowRef()
 
-const boxRef = computed(() => getBox(props.boxId, true)!);
+// TODO resolve extra parameter
+//const boxRef = computed(() => getBox(props.boxId, true)!);
+const boxRef = computed(() => getBox(props.boxId)!);
 const visibleRef = computed(() => boxRef.value && !(boxRef.value.hidden ?? false))
 
 // grid mode
@@ -96,7 +98,7 @@ const isBoxDraggableRef = computed(() => {
         ) ?? false
 })
 
-const baseCssPixelsRef = shallowRef({})
+const baseCssPixelsRef = shallowRef({} as { x: string, y: string, w: string, h: string })
 let basePosition
 
 const isDraggingRef = shallowRef(false)

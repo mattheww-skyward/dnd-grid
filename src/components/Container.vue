@@ -224,7 +224,9 @@ onBeforeUnmount(() => {
 })
 
 function getBox (id) {
-    return _getBox(layoutRef.value, id, layoutOptionsRef.value)
+    // TODO resolve extra parameter
+    //return _getBox(layoutRef.value, id, layoutOptionsRef.value)
+    return _getBox(layoutRef.value, id)
 }
 
 function updateBox (id, data) {
@@ -258,12 +260,12 @@ function stopLayout () {
     modeRef.value = 'grid'
 }
 
-function canStartDrag (evt) {
-    return evt.target && dragSelectorsRef.value.find(selector => evt.target.matches(selector))
+function canStartDrag (evt: MouseEvent | TouchEvent) {
+    return Boolean(evt.target && dragSelectorsRef.value.find(selector => (evt.target as Element).matches(selector)))
 }
 
-function canStartResize (evt) {
-    return evt.target && resizeSelectorsRef.value.find(selector => evt.target.matches(selector))
+function canStartResize (evt: MouseEvent | TouchEvent) {
+    return Boolean(evt.target && resizeSelectorsRef.value.find(selector => (evt.target as Element).matches(selector)))
 }
 
 function getSelectorsFromProp (prop: SelectorProp, additionalSelector?: string) {
