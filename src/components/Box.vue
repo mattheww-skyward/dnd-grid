@@ -1,19 +1,19 @@
-<script>
+<script lang="ts">
 export default {
     inheritAttrs: false
 }
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { ContainerSymbol } from '../symbols.js'
 import { inject, useCssModule, shallowRef, computed, onScopeDispose } from 'vue'
-import { toPixels, fromPixels } from '../tools/layout.js'
+import { toPixels, fromPixels, Position } from '../tools/layout.js'
 import useDndHandler from '../composables/useDndHandler.js'
 
 const props = defineProps({
     boxId: {
         required: true,
-        type: null
+        type: null as any,
     },
 
     overflow: {
@@ -36,7 +36,7 @@ const {
     updateBox,
     startLayout,
     stopLayout,
-} = inject(ContainerSymbol)
+} = inject(ContainerSymbol)!;
 
 const overlayEl = document.createElement('div')
 overlayEl.classList.add($style.overlay)
@@ -44,7 +44,7 @@ overlayEl.classList.add($style.overlay)
 const slotContainerElRef = shallowRef()
 const boxElRef = shallowRef()
 
-const boxRef = computed(() => getBox(props.boxId, true))
+const boxRef = computed(() => getBox(props.boxId, true)!);
 const visibleRef = computed(() => boxRef.value && !(boxRef.value.hidden ?? false))
 
 // grid mode
@@ -81,17 +81,19 @@ const cssPixelsRef = computed(() => {
 })
 
 const isBoxResizableRef = computed(() => {
-    return !disabledRef.value // dnd is enabled
+    return (!disabledRef.value // dnd is enabled
         && isResizableRef.value // resizing is enabled
         && (boxRef.value?.isResizable ?? true) // box resizing is enabled (defaults to enabled)
         && (!boxRef.value?.pinned || boxRef.value?.isResizable) // pinned boxes can only be dragged when resizing is explicitly enabled
+        ) ?? false
 })
 
 const isBoxDraggableRef = computed(() => {
-    return !disabledRef.value // dnd is enabled
+    return (!disabledRef.value // dnd is enabled
         && isDraggableRef.value // dragging is enabled
         && (boxRef.value?.isDraggable ?? true) // box dragging is enabled (defaults to enabled)
         && (!boxRef.value?.pinned || boxRef.value?.isDraggable) // pinned boxes can only be dragged when dragging is explicitly enabled
+        ) ?? false
 })
 
 const baseCssPixelsRef = shallowRef({})
@@ -134,7 +136,7 @@ const resizeEvents = useDndHandler({
     },
     start: function onResizeStart (_, evt) {
         startLayout()
-        resizeMode = evt?.target?.getAttribute?.('dnd-grid-resize') || 'br'
+        resizeMode = (evt?.target as Element | undefined)?.getAttribute?.('dnd-grid-resize') || 'br'
         baseCssPixelsRef.value = cssPixelsRef.value
         basePosition = positionRef.value
         isResizingRef.value = true
@@ -184,7 +186,7 @@ const boxEventsRef = computed(() => {
     return mergeEvents(dragEvents, resizeEvents)
 })
 
-function applyOffsetPixels (basePosition, offsetPixels) {
+function applyOffsetPixels (basePosition: Position, offsetPixels: Position) {
     const slotContainerEl = slotContainerElRef.value
     slotContainerEl?.style?.setProperty('--dnd-grid-box-offset-left', `${offsetPixels.x}px`)
     slotContainerEl?.style?.setProperty('--dnd-grid-box-offset-top', `${offsetPixels.y}px`)
@@ -215,7 +217,7 @@ function applyOffsetPixels (basePosition, offsetPixels) {
     updatePosition(targetPosition)
 }
 
-function updatePosition (targetPosition) {
+function updatePosition (targetPosition: Position) {
     const position = positionRef.value
     if (
         position.x !== targetPosition.x ||
@@ -227,7 +229,7 @@ function updatePosition (targetPosition) {
     }
 }
 
-function mergeEvents (...eventObjects) {
+function mergeEvents (...eventObjects: object[]) {
     const eventMap = new Map()
     eventObjects.forEach(eventObject => {
         for (const key in eventObject) {
@@ -235,7 +237,7 @@ function mergeEvents (...eventObjects) {
             callbackList.push(eventObject[key])
         }
     })
-    const mergedEvents = {}
+    const mergedEvents: { [key: string]: any } = {}
     eventMap.forEach((callbacks, key) => {
         mergedEvents[key] = evt => callbacks.forEach(callback => callback(evt))
     })

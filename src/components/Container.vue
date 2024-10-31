@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 export default {
     inheritAttrs: false
 }
@@ -6,21 +6,26 @@ export default {
 let NEXT_DND_GRID_ID = 1
 </script>
 
-<script setup>
-import { provide, readonly, useCssModule, watch, onMounted, onBeforeUnmount, toRef, shallowRef, computed } from 'vue'
+<script setup lang="ts">
+import { provide, readonly, useCssModule, watch, onMounted, onBeforeUnmount, toRef, shallowRef, computed, Prop, Ref } from 'vue'
 import { ContainerSymbol } from '../symbols.js'
-import { getBox as _getBox, updateBox as _updateBox } from '../tools/layout.js'
+import { Layout, getBox as _getBox, updateBox as _updateBox } from '../tools/layout.js'
+
+type SelectorProp = {
+    include: string;
+    exclude: string;
+}
 
 const props = defineProps({
     layout: {
         type: Array,
         default: () => []
-    },
+    } as Prop<Layout>,
 
     bubbleUp: {
         type: [Boolean, String],
         default: false
-    },
+    } as Prop<boolean | "jump-over">,
 
     disabled: {
         type: Boolean,
@@ -43,7 +48,7 @@ const props = defineProps({
             include: '[dnd-grid-drag]',
             exclude: ':is(input, button, select, a[href])'
         })
-    },
+    } as Prop<SelectorProp>,
 
     resizeSelector: {
         type: Object,
@@ -51,7 +56,7 @@ const props = defineProps({
             include: '[dnd-grid-resize]',
             exclude: ':is(input, button, select, a[href])'
         })
-    },
+    } as Prop<SelectorProp>,
 
     addResizeHandles: {
         type: Boolean,
@@ -124,14 +129,14 @@ const $style = useCssModule()
 const containerElRef = shallowRef()
 const computedCellSizeRef = shallowRef()
 const modeRef = shallowRef('grid')
-const layoutRef = shallowRef(props.layout)
+const layoutRef = shallowRef(props.layout!)
 
 provide(ContainerSymbol, {
     layout: readonly(layoutRef),
     mode: readonly(modeRef),
-    disabled: toRef(() => props.disabled),
-    isResizable: toRef(() => props.isResizable),
-    isDraggable: toRef(() => props.isDraggable),
+    disabled: toRef(() => props.disabled!),
+    isResizable: toRef(() => props.isResizable!),
+    isDraggable: toRef(() => props.isDraggable!),
     computedCellSize: readonly(computedCellSizeRef),
     startLayout,
     stopLayout,
@@ -139,25 +144,25 @@ provide(ContainerSymbol, {
     updateBox,
     canStartDrag,
     canStartResize,
-    addResizeHandles: toRef(() => props.addResizeHandles)
+    addResizeHandles: toRef(() => props.addResizeHandles!)
 })
 
-watch(() => props.layout, newLayout => {
+watch(() => props.layout!, newLayout => {
     layoutRef.value = newLayout
 })
 
 const layoutOptionsRef = computed(() => {
     return {
-        bubbleUp: props.bubbleUp
+        bubbleUp: props.bubbleUp!
     }
 })
 
 const dragSelectorsRef = computed(() => {
-    return getSelectorsFromProp(props.dragSelector)
+    return getSelectorsFromProp(props.dragSelector!)
 })
 
 const resizeSelectorsRef = computed(() => {
-    return getSelectorsFromProp(props.resizeSelector)
+    return getSelectorsFromProp(props.resizeSelector!)
 })
 
 const cursorStyleContentRef = computed(() => {
@@ -165,7 +170,7 @@ const cursorStyleContentRef = computed(() => {
         return ''
     }
 
-    const styleContent = []
+    const styleContent: string[] = []
 
     styleContent.push(
         ...[
@@ -175,7 +180,7 @@ const cursorStyleContentRef = computed(() => {
             [':where([dnd-grid-resize=tl], [dnd-grid-resize=br])', 'cursor: var(--dnd-resize-cursor-nwse, nwse-resize);'],
             [':where([dnd-grid-resize=tr], [dnd-grid-resize=bl])', 'cursor: var(--dnd-resize-cursor-nesw, nesw-resize);']
         ].map(([selector, rules]) => {
-            const selectors = getSelectorsFromProp(props.resizeSelector, selector)
+            const selectors = getSelectorsFromProp(props.resizeSelector!, selector)
             return `
                 .${$style.container}[dnd-grid-id="${DND_GRID_ID}"] :not(.${$style.container}) ${selectors.join(', ')} {
                     ${rules}
@@ -185,7 +190,7 @@ const cursorStyleContentRef = computed(() => {
         ...[
             ['', 'cursor: var(--dnd-drag-cursor, move);']
         ].map(([selector, rules]) => {
-            const selectors = getSelectorsFromProp(props.dragSelector, selector)
+            const selectors = getSelectorsFromProp(props.dragSelector!, selector)
             return `
                 .${$style.container}[dnd-grid-id="${DND_GRID_ID}"] :not(.${$style.container}) ${selectors.join(', ')} {
                     ${rules}
@@ -223,7 +228,7 @@ function getBox (id) {
 }
 
 function updateBox (id, data) {
-    return layoutRef.value = _updateBox(props.layout, id, data, layoutOptionsRef.value)
+    return layoutRef.value = _updateBox(props.layout!, id, data, layoutOptionsRef.value)
 }
 
 function toCssSize (value) {
@@ -261,7 +266,7 @@ function canStartResize (evt) {
     return evt.target && resizeSelectorsRef.value.find(selector => evt.target.matches(selector))
 }
 
-function getSelectorsFromProp (prop, additionalSelector) {
+function getSelectorsFromProp (prop: SelectorProp, additionalSelector?: string) {
     let selectors = [
         (prop.include || '*') + (additionalSelector || ''),
         (prop.include || '*') + (additionalSelector || '') + ' *'
