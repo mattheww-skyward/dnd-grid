@@ -1,3 +1,3 @@
-export * from './components/lib.js'
-export * from './composables/lib.js'
-export * from './tools/lib.js'
+export * from './components/lib'
+export * from './composables/lib'
+export * from './tools/lib'

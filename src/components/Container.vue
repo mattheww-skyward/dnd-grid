@@ -8,8 +8,8 @@ let NEXT_DND_GRID_ID = 1
 
 <script setup lang="ts">
 import { provide, readonly, useCssModule, watch, onMounted, onBeforeUnmount, toRef, shallowRef, computed, Prop, Ref } from 'vue'
-import { ContainerSymbol } from '../symbols.js'
-import { Layout, getBox as _getBox, updateBox as _updateBox } from '../tools/layout.js'
+import { ContainerSymbol } from '../symbols'
+import { Layout, getBox as _getBox, updateBox as _updateBox } from '../tools/layout'
 
 type SelectorProp = {
     include: string;

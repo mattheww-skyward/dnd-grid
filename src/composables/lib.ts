@@ -1,1 +1,1 @@
-export { default as useDndHandler } from './useDndHandler.js'
+export { default as useDndHandler } from './useDndHandler'

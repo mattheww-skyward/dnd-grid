@@ -5,10 +5,10 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ContainerSymbol } from '../symbols.js'
+import { ContainerSymbol } from '../symbols'
 import { inject, useCssModule, shallowRef, computed, onScopeDispose } from 'vue'
-import { toPixels, fromPixels, Position } from '../tools/layout.js'
-import useDndHandler from '../composables/useDndHandler.js'
+import { toPixels, fromPixels, Position } from '../tools/layout'
+import useDndHandler from '../composables/useDndHandler'
 
 const props = defineProps({
     boxId: {
