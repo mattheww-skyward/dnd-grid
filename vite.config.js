@@ -19,6 +19,7 @@ export default defineConfig({
         }
     },
     build: {
+        sourcemap: true,
         lib: {
             entry: resolve('./src/lib.ts'),
             name: 'DndGrid',

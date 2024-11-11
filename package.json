@@ -29,10 +29,12 @@
     ],
     "main": "./dist/dnd-grid.umd.cjs",
     "module": "./dist/dnd-grid.js",
+    "types": "./dist/dnd-grid.d.ts",
     "exports": {
         ".": {
             "import": "./dist/dnd-grid.js",
-            "require": "./dist/dnd-grid.umd.cjs"
+            "require": "./dist/dnd-grid.umd.cjs",
+            "types": "./dist/dnd-grid.d.ts"
         },
         "./style.css": "./dist/style.css",
         "./*": "./src/*/lib.js"
