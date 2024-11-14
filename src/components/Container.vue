@@ -9,7 +9,7 @@ let NEXT_DND_GRID_ID = 1
 <script setup lang="ts">
 import { provide, readonly, useCssModule, watch, onMounted, onBeforeUnmount, toRef, shallowRef, computed, Prop, Ref } from 'vue'
 import { ContainerSymbol } from '../symbols'
-import { Layout, getBox as _getBox, updateBox as _updateBox } from '../tools/layout'
+import { Layout, LayoutElement, getBox as _getBox, updateBox as _updateBox } from '../tools/layout'
 
 type SelectorProp = {
     include: string;
@@ -223,19 +223,19 @@ onBeforeUnmount(() => {
     }
 })
 
-function getBox (id) {
+function getBox (id: any) {
     // TODO resolve extra parameter
     //return _getBox(layoutRef.value, id, layoutOptionsRef.value)
     return _getBox(layoutRef.value, id)
 }
 
-function updateBox (id, data) {
+function updateBox (id: any, data: Partial<LayoutElement>) {
     return layoutRef.value = _updateBox(props.layout!, id, data, layoutOptionsRef.value)
 }
 
-function toCssSize (value) {
+function toCssSize (value: string | number | null | undefined) {
     if (value == undefined) return
-    return isNaN(value) ? value : `${value}px`
+    return isNaN(value as number) ? value : `${value}px`
 }
 
 function updateComputedCellSize () {

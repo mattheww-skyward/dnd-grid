@@ -27,7 +27,7 @@ export default function useMouseHandler (callbacks: Callbacks = {}) {
     let offsetX: number | undefined
     let offsetY: number | undefined
 
-    function doUpdate (type: string, evt: MouseEvent | TouchEvent | undefined) {
+    function doUpdate (type: "start" | "stop" | "update", evt: MouseEvent | TouchEvent | undefined) {
         if (evt) {
             offsetX = (isTouch ? (evt as TouchEvent).changedTouches[0].pageX : (evt as MouseEvent).pageX) - startX!
             offsetY = (isTouch ? (evt as TouchEvent).changedTouches[0].pageY : (evt as MouseEvent).pageY) - startY!

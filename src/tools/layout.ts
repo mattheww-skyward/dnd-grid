@@ -65,7 +65,7 @@ export function sort (layout: Layout) {
 }
 
 // check if position is free in layout
-export function isFree (layout: readonly LayoutElement[], position, filter = (_layout: LayoutElement) => true) {
+export function isFree (layout: readonly LayoutElement[], position: Position, filter = (_layout: LayoutElement) => true) {
     for (let i = 0; i < layout.length; i++) {
         if (!filter(layout[i])) continue
         if (isOverlapping(layout[i].position, position)) {
@@ -153,7 +153,7 @@ export function getBox (layout: Layout, id: any) {
 }
 
 // create box
-export function createBox (layout: Layout, id, data: Partial<LayoutElement>, layoutOptions: LayoutOptions) {
+export function createBox (layout: Layout, id: any, data: Partial<LayoutElement>, layoutOptions: LayoutOptions) {
     let box = { id, position: { x: 0, y: 0, w: 1, h: 1 } }
     if (data) {
         box = updateBoxData(box, data)

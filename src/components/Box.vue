@@ -99,7 +99,7 @@ const isBoxDraggableRef = computed(() => {
 })
 
 const baseCssPixelsRef = shallowRef({} as { x: string, y: string, w: string, h: string })
-let basePosition
+let basePosition: Position | undefined;
 
 const isDraggingRef = shallowRef(false)
 const dragEvents = useDndHandler({
@@ -131,14 +131,14 @@ const dragEvents = useDndHandler({
 })
 
 const isResizingRef = shallowRef(false)
-let resizeMode
+let resizeMode: undefined | "t-" | "-r" | "b-" | "-l" | "tl" | "tr" | "br" | "bl"
 const resizeEvents = useDndHandler({
     allow: function allowResize (evt) {
         return isBoxResizableRef.value && canStartResize(evt)
     },
     start: function onResizeStart (_, evt) {
         startLayout()
-        resizeMode = (evt?.target as Element | undefined)?.getAttribute?.('dnd-grid-resize') || 'br'
+        resizeMode = (evt?.target as Element | undefined)?.getAttribute?.('dnd-grid-resize') as typeof resizeMode || 'br'
         baseCssPixelsRef.value = cssPixelsRef.value
         basePosition = positionRef.value
         isResizingRef.value = true
@@ -231,8 +231,8 @@ function updatePosition (targetPosition: Position) {
     }
 }
 
-function mergeEvents (...eventObjects: object[]) {
-    const eventMap = new Map()
+function mergeEvents (...eventObjects: { [key: string]: (event: any) => void }[]) {
+    const eventMap = new Map<string, ((event: any) => void)[]>();
     eventObjects.forEach(eventObject => {
         for (const key in eventObject) {
             const callbackList = eventMap.get(key) || eventMap.set(key, []).get(key)
@@ -241,7 +241,7 @@ function mergeEvents (...eventObjects: object[]) {
     })
     const mergedEvents: { [key: string]: any } = {}
     eventMap.forEach((callbacks, key) => {
-        mergedEvents[key] = evt => callbacks.forEach(callback => callback(evt))
+        mergedEvents[key] = (evt: any) => callbacks.forEach(callback => callback(evt))
     })
     return mergedEvents
 }
