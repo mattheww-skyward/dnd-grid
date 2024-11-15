@@ -7,7 +7,7 @@ export default {
 <script setup lang="ts">
 import { ContainerSymbol } from '../symbols'
 import { inject, useCssModule, shallowRef, computed, onScopeDispose } from 'vue'
-import { toPixels, fromPixels, Position } from '../tools/layout'
+import { toPixels, fromPixels, GridPosition, PixelPosition } from '../tools/layout'
 import useDndHandler from '../composables/useDndHandler'
 
 const props = defineProps({
@@ -99,7 +99,7 @@ const isBoxDraggableRef = computed(() => {
 })
 
 const baseCssPixelsRef = shallowRef({} as { x: string, y: string, w: string, h: string })
-let basePosition: Position | undefined;
+let basePosition: GridPosition | undefined;
 
 const isDraggingRef = shallowRef(false)
 const dragEvents = useDndHandler({
@@ -188,7 +188,7 @@ const boxEventsRef = computed(() => {
     return mergeEvents(dragEvents, resizeEvents)
 })
 
-function applyOffsetPixels (basePosition: Position, offsetPixels: Position) {
+function applyOffsetPixels (basePosition: GridPosition, offsetPixels: PixelPosition) {
     const slotContainerEl = slotContainerElRef.value
     slotContainerEl?.style?.setProperty('--dnd-grid-box-offset-left', `${offsetPixels.x}px`)
     slotContainerEl?.style?.setProperty('--dnd-grid-box-offset-top', `${offsetPixels.y}px`)
@@ -219,7 +219,7 @@ function applyOffsetPixels (basePosition: Position, offsetPixels: Position) {
     updatePosition(targetPosition)
 }
 
-function updatePosition (targetPosition: Position) {
+function updatePosition (targetPosition: GridPosition) {
     const position = positionRef.value
     if (
         position.x !== targetPosition.x ||

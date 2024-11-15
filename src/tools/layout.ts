@@ -17,11 +17,20 @@ Layout json
     ...
 ]
 */
-export type Position = {
+type Position = {
     x: number,
     y: number,
     w: number,
     h: number,
+}
+export type GridPosition = Position;
+export type PixelPosition = Position;
+
+export type SizeLimits = {
+    minWidth: number,
+    minHeight: number,
+    maxWidth: number,
+    maxHeight: number,
 }
 
 export type LayoutElement = {
@@ -30,7 +39,7 @@ export type LayoutElement = {
     pinned?: boolean,
     isResizable?: boolean,
     isDraggable?: boolean,
-    position: Position,
+    position: GridPosition,
 }
 
 export type LayoutOptions = {
@@ -65,7 +74,7 @@ export function sort (layout: Layout) {
 }
 
 // check if position is free in layout
-export function isFree (layout: readonly LayoutElement[], position: Position, filter = (_layout: LayoutElement) => true) {
+export function isFree (layout: readonly LayoutElement[], position: GridPosition, filter = (_layout: LayoutElement) => true) {
     for (let i = 0; i < layout.length; i++) {
         if (!filter(layout[i])) continue
         if (isOverlapping(layout[i].position, position)) {
@@ -208,7 +217,7 @@ export function removeBox (layout: Layout, id: any, layoutOptions: LayoutOptions
 }
 
 // check if 2 positions are overlapping
-export function isOverlapping (positionA: Position, positionB: Position) {
+export function isOverlapping (positionA: GridPosition, positionB: GridPosition) {
     return positionA.x < (positionB.x + positionB.w) &&
         (positionA.x + positionA.w) > positionB.x &&
         positionA.y < (positionB.y + positionB.h) &&
@@ -216,8 +225,8 @@ export function isOverlapping (positionA: Position, positionB: Position) {
 }
 
 // get box position in pixels
-export function toPixels (position: Position, cellWidth: number, cellHeight: number, spacing: number = 0) {
-    const pixels: Partial<Position> = {};
+export function toPixels (position: GridPosition, cellWidth: number, cellHeight: number, spacing: number = 0): PixelPosition {
+    const pixels: Partial<PixelPosition> = {};
     for (let key in position || {}) {
         switch (key) {
             case 'x':
@@ -234,12 +243,12 @@ export function toPixels (position: Position, cellWidth: number, cellHeight: num
                 break
         }
     }
-    return pixels as Position;
+    return pixels as PixelPosition;
 }
 
 // get box position from pixels
-export function fromPixels (pixels: Position, cellWidth: number, cellHeight: number, spacing: number = 0) {
-    const position: Partial<Position> = {}
+export function fromPixels (pixels: PixelPosition, cellWidth: number, cellHeight: number, spacing: number = 0): GridPosition {
+    const position: Partial<GridPosition> = {}
     for (let key in pixels || {}) {
         switch (key) {
             case 'x':
@@ -256,7 +265,7 @@ export function fromPixels (pixels: Position, cellWidth: number, cellHeight: num
                 break
         }
     }
-    return position as Position;
+    return position as GridPosition;
 }
 
 // get box helper. return box and the index
