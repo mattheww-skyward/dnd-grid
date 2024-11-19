@@ -18,9 +18,13 @@ Layout json
 ]
 */
 type Position = {
+    /** horizontal position starting with 1 */
     x: number,
+    /** vertical position starting with 1 */
     y: number,
+    /** box width */
     w: number,
+    /** box height */
     h: number,
 }
 export type GridPosition = Position;
@@ -34,12 +38,20 @@ export type SizeLimits = {
 }
 
 export type LayoutElement = {
-    id: any,
+    /** Box identifier (can be any type) */
+    id: any, 
+    /** is box hidden? */
     hidden?: boolean,
+    /** should box stay fixed on its position */
     pinned?: boolean,
+    /** box can be resized */
     isResizable?: boolean,
+    /** box can be dragged */
     isDraggable?: boolean,
+    /** box position in the layout grid */
     position: GridPosition,
+    /** min/max width/height the box can be resized to */
+    resizeLimits?: SizeLimits,
 }
 
 export type LayoutOptions = {
