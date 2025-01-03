@@ -54,6 +54,10 @@ export type LayoutElement = {
     resizeLimits?: SizeLimits,
 }
 
+export type PartialLayoutElement = Partial<Omit<LayoutElement, 'position'> & {
+    position?: Partial<GridPosition>
+}>;
+
 export type LayoutOptions = {
     bubbleUp?: boolean | "jump-over",
 }
@@ -143,7 +147,7 @@ export function moveToFreePlace (layout: readonly LayoutElement[], box: LayoutEl
 }
 
 // immutable box data merge
-export function updateBoxData (box: LayoutElement, data: Partial<LayoutElement> = {}) {
+export function updateBoxData (box: LayoutElement, data: PartialLayoutElement = {}) {
     // eslint-disable-next-line no-unused-vars
     const { id, position, ...layoutOptions } = data
     return {
@@ -206,7 +210,7 @@ export function addBox (layout: Layout, box: LayoutElement, layoutOptions: Layou
 }
 
 // update box
-export function updateBox (layout: Layout, id: any, data: Partial<LayoutElement>, layoutOptions: LayoutOptions) {
+export function updateBox (layout: Layout, id: any, data: PartialLayoutElement, layoutOptions: LayoutOptions) {
     const { box } = _getBox(layout, id)
     if (!box) {
         return layout

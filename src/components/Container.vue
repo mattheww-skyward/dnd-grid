@@ -9,7 +9,7 @@ let NEXT_DND_GRID_ID = 1
 <script setup lang="ts">
 import { provide, readonly, useCssModule, watch, onMounted, onBeforeUnmount, toRef, shallowRef, computed, Prop, Ref } from 'vue'
 import { ContainerSymbol } from '../symbols'
-import { Layout, LayoutElement, getBox as _getBox, updateBox as _updateBox } from '../tools/layout'
+import { GridPosition, Layout, LayoutElement, PartialLayoutElement, getBox as _getBox, updateBox as _updateBox } from '../tools/layout'
 
 type SelectorProp = {
     include: string;
@@ -128,7 +128,7 @@ const $style = useCssModule()
 
 const containerElRef = shallowRef()
 const computedCellSizeRef = shallowRef()
-const modeRef = shallowRef('grid')
+const modeRef = shallowRef<'grid' | 'layout'>('grid')
 const layoutRef = shallowRef(props.layout!)
 
 provide(ContainerSymbol, {
@@ -229,7 +229,7 @@ function getBox (id: any) {
     return _getBox(layoutRef.value, id)
 }
 
-function updateBox (id: any, data: Partial<LayoutElement>) {
+function updateBox (id: any, data: PartialLayoutElement) {
     return layoutRef.value = _updateBox(props.layout!, id, data, layoutOptionsRef.value)
 }
 
