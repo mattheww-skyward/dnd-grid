@@ -124,7 +124,7 @@ const dragEvents = useDndHandler({
     },
     update: function onDragUpdate ({ offsetX, offsetY }) {
         let offsetPixels = { x: offsetX, y: offsetY, w: 0, h: 0 }
-        applyOffsetPixels(basePosition, offsetPixels)
+        applyOffsetPixels(basePosition!, offsetPixels)
     }
 })
 
@@ -178,7 +178,7 @@ const resizeEvents = useDndHandler({
                 break
         }
 
-        applyOffsetPixels(basePosition, offsetPixels)
+        applyOffsetPixels(basePosition!, offsetPixels)
     }
 })
 
@@ -233,7 +233,7 @@ function mergeEvents (...eventObjects: { [key: string]: (event: any) => void }[]
     const eventMap = new Map<string, ((event: any) => void)[]>()
     eventObjects.forEach(eventObject => {
         for (const key in eventObject) {
-            const callbackList = eventMap.get(key) || eventMap.set(key, []).get(key)
+            const callbackList = eventMap.get(key) || eventMap.set(key, []).get(key)!
             callbackList.push(eventObject[key])
         }
     })
