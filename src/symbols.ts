@@ -1,11 +1,11 @@
-import { InjectionKey, Ref, ShallowRef } from "vue";
-import { Layout, LayoutElement } from "./tools/layout";
+import { InjectionKey, Ref, ShallowRef } from "vue"
+import { Layout, LayoutElement } from "./tools/layout"
 
 export type ComputedCellSize = {
-    width: number;
-    height: number;
-    spacing: number;
-};
+    width: number,
+    height: number,
+    spacing: number,
+}
 
 export type ContainerProvision = {
     layout: Readonly<ShallowRef<Layout>>,
@@ -21,6 +21,6 @@ export type ContainerProvision = {
     canStartDrag: (evt: any) => boolean,
     canStartResize: (evt: any) => boolean,
     addResizeHandles: Readonly<Ref<boolean>>,
-};
+}
 
-export const ContainerSymbol = Symbol('DndGridContainer') as InjectionKey<ContainerProvision>;
+export const ContainerSymbol = Symbol('DndGridContainer') as InjectionKey<ContainerProvision>

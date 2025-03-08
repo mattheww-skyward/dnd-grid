@@ -27,8 +27,8 @@ type Position = {
     /** box height */
     h: number,
 }
-export type GridPosition = Position;
-export type PixelPosition = Position;
+export type GridPosition = Position
+export type PixelPosition = Position
 
 export type SizeLimits = {
     minWidth: number,
@@ -39,7 +39,7 @@ export type SizeLimits = {
 
 export type LayoutElement = {
     /** Box identifier (can be any type) */
-    id: any, 
+    id: any,
     /** is box hidden? */
     hidden?: boolean,
     /** should box stay fixed on its position */
@@ -55,14 +55,14 @@ export type LayoutElement = {
 }
 
 export type PartialLayoutElement = Partial<Omit<LayoutElement, 'position'> & {
-    position?: Partial<GridPosition>
-}>;
+    position?: Partial<GridPosition>,
+}>
 
 export type LayoutOptions = {
     bubbleUp?: boolean | "jump-over",
 }
 
-export type Layout = readonly LayoutElement[];
+export type Layout = readonly LayoutElement[]
 
 // sort layout based on position and visibility
 export function sort (layout: Layout) {
@@ -242,7 +242,7 @@ export function isOverlapping (positionA: GridPosition, positionB: GridPosition)
 
 // get box position in pixels
 export function toPixels (position: GridPosition, cellWidth: number, cellHeight: number, spacing: number = 0): PixelPosition {
-    const pixels: Partial<PixelPosition> = {};
+    const pixels: Partial<PixelPosition> = {}
     for (let key in position || {}) {
         switch (key) {
             case 'x':
@@ -259,7 +259,7 @@ export function toPixels (position: GridPosition, cellWidth: number, cellHeight:
                 break
         }
     }
-    return pixels as PixelPosition;
+    return pixels as PixelPosition
 }
 
 // get box position from pixels
@@ -281,7 +281,7 @@ export function fromPixels (pixels: PixelPosition, cellWidth: number, cellHeight
                 break
         }
     }
-    return position as GridPosition;
+    return position as GridPosition
 }
 
 // get box helper. return box and the index

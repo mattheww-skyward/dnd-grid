@@ -1,19 +1,19 @@
 import { onScopeDispose } from 'vue'
 
 type MouseCallbackArg = {
-    startX: number
-    startY: number
-    offsetX: number
-    offsetY: number
+    startX: number,
+    startY: number,
+    offsetX: number,
+    offsetY: number,
 }
 
 export type EventHandlerCallback = (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent | undefined) => void
 
 export type Callbacks = {
-    allow?: (evt: MouseEvent | TouchEvent) => boolean
-    start?: (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent) => void;
-    stop?: (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent | undefined) => void;
-    update?: (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent) => void;
+    allow?: (evt: MouseEvent | TouchEvent) => boolean,
+    start?: (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent) => void,
+    stop?: (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent | undefined) => void,
+    update?: (movement: MouseCallbackArg, evt: MouseEvent | TouchEvent) => void,
 }
 
 
@@ -21,7 +21,7 @@ export default function useMouseHandler (callbacks: Callbacks = {}) {
     let hasStarted = false
     let isActive = false
     let isTouch = false
-    let startEvent: MouseEvent | TouchEvent | undefined;
+    let startEvent: MouseEvent | TouchEvent | undefined
     let startX: number | undefined
     let startY: number | undefined
     let offsetX: number | undefined

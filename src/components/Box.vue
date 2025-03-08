@@ -36,7 +36,7 @@ const {
     updateBox,
     startLayout,
     stopLayout,
-} = inject(ContainerSymbol)!;
+} = inject(ContainerSymbol)!
 
 const overlayEl = document.createElement('div')
 overlayEl.classList.add($style.overlay)
@@ -44,9 +44,7 @@ overlayEl.classList.add($style.overlay)
 const slotContainerElRef = shallowRef()
 const boxElRef = shallowRef()
 
-// TODO resolve extra parameter
-//const boxRef = computed(() => getBox(props.boxId, true)!);
-const boxRef = computed(() => getBox(props.boxId)!);
+const boxRef = computed(() => getBox(props.boxId)!)
 const visibleRef = computed(() => boxRef.value && !(boxRef.value.hidden ?? false))
 
 // grid mode
@@ -99,7 +97,7 @@ const isBoxDraggableRef = computed(() => {
 })
 
 const baseCssPixelsRef = shallowRef({} as { x: string, y: string, w: string, h: string })
-let basePosition: GridPosition | undefined;
+let basePosition: GridPosition | undefined
 
 const isDraggingRef = shallowRef(false)
 const dragEvents = useDndHandler({
@@ -232,7 +230,7 @@ function updatePosition (targetPosition: GridPosition) {
 }
 
 function mergeEvents (...eventObjects: { [key: string]: (event: any) => void }[]) {
-    const eventMap = new Map<string, ((event: any) => void)[]>();
+    const eventMap = new Map<string, ((event: any) => void)[]>()
     eventObjects.forEach(eventObject => {
         for (const key in eventObject) {
             const callbackList = eventMap.get(key) || eventMap.set(key, []).get(key)

@@ -12,8 +12,8 @@ import { ContainerSymbol } from '../symbols'
 import { GridPosition, Layout, LayoutElement, PartialLayoutElement, getBox as _getBox, updateBox as _updateBox } from '../tools/layout'
 
 type SelectorProp = {
-    include: string;
-    exclude: string;
+    include: string,
+    exclude: string,
 }
 
 const props = defineProps({
@@ -224,8 +224,6 @@ onBeforeUnmount(() => {
 })
 
 function getBox (id: any) {
-    // TODO resolve extra parameter
-    //return _getBox(layoutRef.value, id, layoutOptionsRef.value)
     return _getBox(layoutRef.value, id)
 }
 
